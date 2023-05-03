@@ -8,20 +8,47 @@
 
 #include <iostream>
 #include <chrono>
+#include <vector>
 
 // The Birthday Problem, main()
 // Summary: This application simulates the birthday problem a large number of times to reveal the probability of a birthday match in a groupd of a given number of people.
 int main(){    
     const int total = 1000000;
-    int n, matches;
+    int n, matches = 0;
 
     std::cout << "Enter the number of people in the group: " << std::flush;
     std::cin >> n;
+
+    std::vector<int> bdays;
+    std::srand (time(NULL));
+
+    bool matchFound = false;
 
     if(n > 366)
         matches = total;
     else{
         // Write your code here
+        for (int i = 0; i<total; i++){
+            // random bdays
+            for (int j = 0; j<n; j++){
+                bdays.push_back(std::rand() % 366);
+            }
+
+            for (int j = 0; j<n; j++){
+                for (int k = j+1; k<n; k++){
+                    if (bdays[j] == bdays[k]){
+                        matchFound = true;;
+                    }
+                }
+            }
+
+            bdays.clear();
+
+            if (matchFound){
+                matches++;
+                matchFound = false;
+            }
+        }
     }
 
     std::cout << "The probability of a birthday match is " << (double)matches/total << "\n\n" << std::flush;  

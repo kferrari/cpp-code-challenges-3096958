@@ -16,8 +16,8 @@
 #include <algorithm>
 #include <cstring>
 
-#define N 10
-#define M 10
+#define N 25
+#define M 25
 
 // live_neighbors()
 // Summary: This function returns the number of live neighbors to a given cell.
@@ -56,26 +56,26 @@ int main(){
     char game[N][M];  
     std::memset(game,'-',N*M);
 
-    // A glider     // - - - - - - - - - -
-    game[1][1]='X'; // - X - - - - - - - -
-    game[2][2]='X'; // - - X - - - - - - -
-    game[3][0]='X'; // X X X - - - - - - -
-    game[3][1]='X';
-    game[3][2]='X';
+    // // A glider     // - - - - - - - - - -
+    // game[1][1]='X'; // - X - - - - - - - -
+    // game[2][2]='X'; // - - X - - - - - - -
+    // game[3][0]='X'; // X X X - - - - - - -
+    // game[3][1]='X';
+    // game[3][2]='X';
 
-    // A blinker    // - - - - - - - - - -
-    game[3][6]='X'; // - - - - - - - - - -
-    game[3][7]='X'; // - - - - - - - - - -
-    game[3][8]='X'; // - - - - - - X X X -
+    // // A blinker    // - - - - - - - - - -
+    // game[3][6]='X'; // - - - - - - - - - -
+    // game[3][7]='X'; // - - - - - - - - - -
+    // game[3][8]='X'; // - - - - - - X X X -
 
-/*
+
     // An R-pentomino   // - - - - - 
     game[11][12]='X';   // - - X X - 
     game[11][13]='X';   // - X X - - 
     game[12][11]='X';   // - - X - - 
     game[12][12]='X';
     game[13][12]='X';
-*/
+
     char new_game[N][M];
     int generation = 0;
     std::string go_on;

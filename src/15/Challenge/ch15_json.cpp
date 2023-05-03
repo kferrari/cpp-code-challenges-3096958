@@ -11,6 +11,7 @@
 #include <fstream>
 #include <string>
 #include <stack>
+#include <vector>
 
 // is_valid_JSON()
 // Summary: This function returns true if the file in the argument is a valid JSON file based on its balance of braces, brackets, and quotes.
@@ -20,16 +21,69 @@
 int is_valid_JSON(std::string filename){
     std::string line;
     bool quotes = false; 
+    bool curly = false;
+    bool square = false;
+
+    std::vector<char> brackets;
 
     std::fstream file (filename, std::ios::in);
     if(file.is_open()){
  
         // Write your code here
+        while(std::getline(file, line, '\n')){
+            for (const auto &e : line){
+                if (e == '\"' && !quotes){
+                    quotes = true;
+                    brackets.push_back('\"');
+                    continue;
+                }
+                if (e == '\"' && quotes){
+                    quotes = false;
+                    brackets.pop_back();
+                    continue;
+                }
+
+                if (quotes){
+                    continue;
+                }
+
+                switch (e){
+                    case '{':
+                        brackets.push_back('{');
+                        break;
+                    case '}':
+                        if (brackets.back() != '{'){
+                            return 0;
+                        } else {
+                            brackets.pop_back();
+                        }
+                        break;
+                    case '[':
+                        brackets.push_back('[');
+                        break;
+                    case ']':
+                        if (brackets.back() != '['){
+                            return 0;
+                        } else {
+                            brackets.pop_back();
+                        }
+                        break;
+                }
+            }
+        }
 
         file.close();
+
+        if (brackets.empty()){
+            return 1;
+        } else {
+            return 0;
+        }
     }
     else
         return -1;
+
+    return -1;
 }
 
 // JSON File Validation, main()

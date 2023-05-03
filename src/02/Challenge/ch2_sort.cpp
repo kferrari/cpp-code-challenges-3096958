@@ -17,6 +17,15 @@
 bool sort_array(int *arr, int n){
 
     // Write your code here
+    for (int i = 0; i<n; i++){
+        for (int j = i; j<n; j++){
+            if (arr[j] < arr[i]){
+                arr[j] += arr[i];
+                arr[i] = arr[j] - arr[i];
+                arr[j] -= arr[i];
+            }
+        }
+    }
 
     return false;
 }
@@ -24,8 +33,8 @@ bool sort_array(int *arr, int n){
 // Main function
 int main(){
     // The following array will be treated as an array of length len. 
-    const int len = 7; // Don't exceed the length of the array below!
-    int array[] = {2, 9, 4, 3, 5, 1, 6, 8, 0, 7};
+    const int len = 10; // Don't exceed the length of the array below!
+    int array[] = {2, 9, 4, 3, 5, 5, 6, 8, 0, 7};
 
     // Print the original array
     std::cout << "Original Array: [ ";

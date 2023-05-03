@@ -8,6 +8,18 @@
 #include <string>
 #include <ctime>
 
+bool isLeap(int y){
+    if (y % 4 != 0){
+        return false;
+    } else if (y % 100 != 0){
+        return true;
+    } else if (y % 400 != 0){
+        return false;
+    } else {
+        return true;
+    }
+}
+
 // Age in Days, main()
 // Summary: This application asks the user's birth date and prints their age in days.
 int main(){
@@ -26,6 +38,71 @@ int main(){
         birth_m = 12;
 
     // Write your code here
+
+    // Get todays date
+    const time_t now = time(0);
+    tm *ltm = localtime(&now);
+
+    today_d = ltm->tm_mday;
+    today_m = 1 + ltm->tm_mon;
+    today_y = 1900 + ltm->tm_year;
+
+
+    age = 0;
+    bool leap = false;
+
+    // Months in birth year
+    for (int i = 12; i>=birth_m; i--){
+        if ((i % 2 == 1 && i<8) || (i%2 == 0 && i>= 8)){
+            age += 31;
+        }
+        if (i == 4 || i == 6 || i == 9 || i == 11){
+            age += 30;
+        }
+        if ( i == 2){
+            if (isLeap(i)){
+                age += 29;
+            } else {
+                age += 28;
+            }
+        }
+    }
+
+    // Minus days
+    age -= birth_d;
+
+    // Calculate days from year + 1
+    for (int i = birth_y+1; i<=today_y; i++){
+        if (isLeap(i)) {
+            age += 366;
+        } else {
+            age += 365;
+        }
+    }
+
+    std::cout << age << std::endl;
+
+    // From month
+    for (int i = 12; i >= today_m; i--){
+        if ((i % 2 == 1 && i<8) || (i%2 == 0 && i>= 8)){
+            age -= 31;
+        }
+        if (i == 4 || i == 6 || i == 9 || i == 11){
+            age -= 30;
+        }
+        if ( i == 2){
+            if (leap){
+                age -= 29;
+            } else {
+                age -= 28;
+            }
+        }
+    }
+
+    std::cout << age << std::endl;
+
+    // Add days
+    age += today_d;
 
     if(age < 43830)
         std::cout << "You are " << age << " days old.";

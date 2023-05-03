@@ -34,14 +34,121 @@ void ask_for_move(char game[][3], char mark){
 //           mark: The AI's mark: 'X' or 'O'.
 // Returns: Nothing.
 
-#define TWO_PLAYERS
+// #define TWO_PLAYERS
 void make_move(char game[][3], char mark){ 
     #ifdef TWO_PLAYERS
     ask_for_move(game,mark);
     #else
     
     // Write your code here and comment out the definition of TWO_PLAYERS above
+    
+    // #define LINEAR
+    #ifdef LINEAR
+    // First attempt: choose first free field
+    for (int row = 0; row<3; row++){
+        for (int col = 0; col<3; col++){
+            if (game[row][col] == ' '){
+                game[row][col] = mark;
+                return;
+            }
+        }
+    }
+    #endif
 
+    #define AVOID
+    #ifdef AVOID
+    // Second attempt: avoid other player winning
+    // Check horitontal/vertical
+    char enemyMark;
+    if (mark == 'O'){
+        enemyMark = 'X';
+    } else {
+        enemyMark = 'O';
+    }
+
+    for (int row = 0; row<3; row++){
+        int consCnt = 0;
+        for (int col = 0; col<3; col++){
+            if (game[row][col] == ' '){
+               continue;
+            } 
+            if (game[row][col] == enemyMark){
+                consCnt++;
+            }
+        }
+        if (consCnt == 2){
+            for (int col = 0; col<3; col++){
+                if (game[row][col] == ' '){
+                game[row][col] = mark;
+                return;
+                } 
+            }
+        }
+    }
+
+    for (int col = 0; col<3; col++){
+        int consCnt = 0;
+        for (int row = 0; row<3; row++){
+            if (game[row][col] == ' '){
+               continue;
+            } 
+            if (game[row][col] == enemyMark){
+                consCnt++;
+            }
+        }
+        if (consCnt == 2){
+            for (int row = 0; row<3; row++){
+                if (game[row][col] == ' '){
+                game[row][col] = mark;
+                return;
+                } 
+            }
+        }
+    }
+
+    // Check two diagonals
+    if (game[0][0] == enemyMark && game[1][1] == enemyMark && game[2][2] == ' '){
+        game[2][2] = mark;
+        return;
+    }
+    if (game[0][0] == enemyMark && game[1][1] == ' ' && game[2][2] == enemyMark){
+        game[1][1] = mark;
+        return;
+    }
+    if (game[0][0] == ' ' && game[1][1] == enemyMark && game[2][2] == enemyMark){
+        game[0][0] = mark;
+        return;
+    }
+
+    if (game[2][0] == enemyMark && game[1][1] == enemyMark && game[0][2] == ' '){
+        game[0][2] = mark;
+        return;
+    }
+    if (game[2][0] == enemyMark && game[1][1] == ' ' && game[0][2] == enemyMark){
+        game[1][1] = mark;
+        return;
+    }
+    if (game[2][0] == ' ' && game[1][1] == enemyMark && game[0][2] == enemyMark){
+        game[2][0] = mark;
+        return;
+    }
+
+    if (game[1][1] == ' '){
+        game[1][1] = mark;
+        return;
+    }
+
+    // In case we're still here, put in next free slot
+    for (int row = 0; row<3; row++){
+        for (int col = 0; col<3; col++){
+            if (game[row][col] == ' '){
+                game[row][col] = mark;
+                return;
+            }
+        }
+    }
+
+    #endif
     #endif
     return;
 }
@@ -58,6 +165,57 @@ void make_move(char game[][3], char mark){
 char game_state(char game[][3]){
 
     // Write your code here
+
+    // Check horitontal/vertical
+    for (int row = 0; row<3; row++){
+        char player = game[row][0];
+        int consCnt = 0;
+        for (int col = 0; col<3; col++){
+            if (game[row][col] == ' '){
+               continue;
+            } 
+            if (player == game[row][col]){
+                consCnt++;
+            }
+        }
+        if (consCnt == 3){
+            return player;
+        }
+    }
+
+    int nMoves = 0;
+    for (int col = 0; col<3; col++){
+        char player = game[0][col];
+        int consCnt = 0;
+        for (int row = 0; row<3; row++){
+            if (game[row][col] == ' '){
+               continue;
+            } 
+            nMoves++;
+            if (player == game[row][col]){
+                consCnt++;
+            }
+        }
+        if (consCnt == 3){
+            return player;
+        }
+    }
+
+    // Check two diagonals
+    if (game[1][1] != ' '){
+        if (game[0][0] == game[1][1] && game[2][2] == game[1][1]){
+            return char(game[0][0]);
+        }
+
+        if (game[0][2] == game[1][1] && game[0][2] == game[2][0]){
+            return char(game[0][2]);
+        }
+    }
+
+    // Check nMoves
+    if (nMoves == 9){
+        return 't';
+    }
 
     return 'a';
 }

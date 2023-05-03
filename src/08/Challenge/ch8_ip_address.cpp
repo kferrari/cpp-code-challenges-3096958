@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
 
 // is_valid_ip()
 // Summary: This function validates an IP address.
@@ -18,8 +19,33 @@
 bool is_valid_ip(std::string ip){
 
     // Write your code here
+    int numSegments = 0;
+    int segments[4];
+    std::string segment;
+    std::istringstream iptocheck;
 
-    return false;
+    iptocheck.str(ip);
+
+    while(std::getline(iptocheck, segment, '.')){
+        try {
+            segments[numSegments] = stoi(segment);
+        } catch (...) {
+            return false;
+        }
+        numSegments++;
+    }
+
+    if (numSegments != 4){
+        return false;
+    }
+
+    for (int i=0; i<numSegments; i++){
+        if (segments[i] < 0 || segments[i] > 255){
+            return false;
+        }
+    }
+
+    return true;
 }
 
 // Main function
